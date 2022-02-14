@@ -73,10 +73,7 @@ final class DetalilPresenter: DetailViewPresenterProtocol {
     
     func configure() {
         if let myweather = weather {
-            
-            
-            
-            
+
             let model = WeatherInfoViewModule(
                 getMainTemp: myweather.main.temp,
                 getFeelsLike: myweather.main.feels_like,

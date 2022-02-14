@@ -25,26 +25,29 @@ final class DetailViewController: UIViewController {
     
     var presenter: DetailViewPresenterProtocol!
     
-    @IBAction func addToFollowListButton(_ sender: Any) {
+    @objc func bookmarkButton(_ sender: UIBarButtonItem) {
         guard let id = presenter.weather?.id else { return }
         
         guard var idArray = defaults.object(forKey: "followlist") as? [Int] else { return }
             if idArray.contains(id) {
                 guard let index = idArray.firstIndex(of: id) else { return }
                 idArray.remove(at: index)
-                addToFollowList.setImage(UIImage(systemName: "bookmark"), for: .normal)
+                sender.image = UIImage(systemName: "bookmark")
             } else {
                 idArray.append(id)
-                addToFollowList.setImage(UIImage(systemName: "bookmark.fill"), for: .normal)
+                sender.image = UIImage(systemName: "bookmark.fill")
             }
         defaults.setValue(idArray, forKey: "followlist")
     }
     
     override func viewDidLoad() {
+        
+        let button = UIBarButtonItem(title: .none, style: .plain, target: self, action: #selector(bookmarkButton))
+        
         if presenter.isCurrentCityInFollowList {
-            self.addToFollowList.imageView?.image = UIImage.init(systemName: "bookmark.fill")
+            button.image = UIImage(systemName: "bookmark.fill")
         } else {
-            self.addToFollowList.imageView?.image = UIImage.init(systemName: "bookmark")
+            button.image = UIImage(systemName: "bookmark")
         }
         
         self.navigationController!.navigationBar.setBackgroundImage(UIImage(), for: .default)
@@ -53,6 +56,8 @@ final class DetailViewController: UIViewController {
         
         self.navigationController?.navigationBar.barStyle = .black
         self.navigationController?.navigationBar.tintColor = .white
+        
+        self.navigationItem.rightBarButtonItem = button
         
         super.viewDidLoad()
     }
